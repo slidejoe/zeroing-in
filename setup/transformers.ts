@@ -10,9 +10,20 @@ function sup(ctx: MarkdownTransformContext) {
     )
   }
 
+  // function sub(ctx: MarkdownTransformContext) {
+  //   ctx.s.replace(
+  //     /(?<=[\S]+)\_([\w]+)/gm,
+  //     (match, sub) => {
+  //       return `<sub>${sub}</sub>`
+  //     },
+  //   )
+  // }
+
+  // Only works with specified characters to prevent it breaking Wikipedia URLs!
+  // For use to specify numerical bases. Works with special characters too, to allow for `, -, etc
   function sub(ctx: MarkdownTransformContext) {
     ctx.s.replace(
-      /(?<=[\S]+)\_([\w]+)/gm,
+      /(?<=[0-9.`A-F]+)\_([0-9\-.]+)/gm,
       (match, sub) => {
         return `<sub>${sub}</sub>`
       },
@@ -28,11 +39,21 @@ function sup(ctx: MarkdownTransformContext) {
     )
   }
 
+  function myAutoLinks(ctx: MarkdownTransformContext) {
+    ctx.s.replace(
+      /(^|[^\("])(https?:\/\/([^\s]+[\w])\/?)/gm,
+      (match, prefix, url, display) => {
+        console.log(match, prefix, url, display);
+        return `${prefix}[${ display }](${ url })`
+      },
+    )
+  }
+
 export default defineTransformersSetup(() => {
   return {
-    pre: [colorPreview],
+    pre: [colorPreview, myAutoLinks],
     preCodeblock: [],
     postCodeblock: [],
-    post: [ sup, sub ],
+    post: [ sub, sup ],
   }
 })

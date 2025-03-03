@@ -272,9 +272,9 @@ But in hexadecimal....
 
 So converting from binary to hexadecimal is easy!
 
-[1 0 1 0]{v-mark.box.orange=1} [ 1 0 1 0]{v-mark.box.orange=2}&nbsp;_2
+[1 0 1 0]{v-mark.box.orange=1} [ 1 0 1 0]{v-mark.box.orange=2}<sub>2</sub>
 
-&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_16
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A_16
 
 1010_2 = A_16, so 10101010_2 must be AA_16.
 
@@ -311,6 +311,16 @@ layout: center
 ---
 
 # Well, that's all well and good for **whole numbers**...
+
+This is how .NET `short` (15 + 1 bits), `int` (31 + 1 bits), `long` (63 + 1 bits) work!
+
+<v-clicks>
+
+### What's the +1 for?
+
+One bit is used to represent a minus sign. This is called _two's complement_.
+
+</v-clicks>
 
 ---
 layout: center
@@ -414,3 +424,216 @@ console.log(0.1, 0.2, 0.3, 0.1 + 0.2);
 When we say `0.1`, remember a decimal to binary conversion (and rounding!) is happening.
 
 The difference in answers is because we were storing our number as 8-bit (unsigned, fixed-point), but JavaScript is using `Number`, a 64-bit signed floating point number
+
+---
+layout: center
+---
+
+## How do you write a decimal point when you've only got 1s and 0s?!
+
+<v-clicks>
+
+- We've been writing fractional decimal numbers using a `.`
+- Computers store data as `0` or `1`
+- `.` is not a `0` or a `1`
+
+</v-clicks>
+
+---
+layout: center
+---
+
+## Fixed point notation
+
+Lets use 4 bytes and imagine the decimal point sits between them
+
+[00000000 00000000]{v-mark.box.orange=1} [00000000 00000000]{v-mark.box.orange=2}
+
+<v-clicks>
+
+- Largest whole number: 11111111 11111111_2 = 65535_10
+- Smallest precision: 0.00000000 00000001_2 &approx; 0.00002_10
+- That's a lot of bits to contain a number as small as 65535_10...
+
+</v-clicks>
+---
+
+## Exponents, an introduction
+
+$$c \approx 299,800,000 ms^{-1}$$
+Woah, thats a big number. And its really hard to grasp the size of it at a glance.
+
+<v-click>
+So you might see this written as an exponent:
+
+$$c \approx 2.998 \times 10^{8} ms^{-1}$$
+
+The number is now a number between 1 and 10 (10^0 and 10^1) with an exponent to multiply it to the true value
+</v-click>
+<v-click>
+You might also see:
+
+$c \approx 2.998 \exp(8)ms^{-1}$
+or
+$c \approx 2.998e+8ms^{-1}$
+
+Particularly on calculators.
+</v-click>
+
+---
+
+## Exponents in binary
+<v-clicks>
+
+1. Convert to binary
+
+  &pi; &approx; 11.001001000011111101101..._2
+
+2. Use an exponent to make the _mantissa_ a number between 2^0 (1) and 2^1 (2)
+
+  1.1001001000011111101101...&times;2^1_2
+
+3. Discard the `1.` (it's always a 1)
+
+  [1.]{v-mark.strike.orange}1001001000011111101101...&times;2^1_2
+
+4. Add 127 to the exponent (this number is offset to allow for positive and negative exponents)
+
+  1_2 + 01111111_2 = 10000000
+
+4. Fill in the bits in a predefined pattern
+
+  0 [10000000]{v-mark.box.orange=10} [1001001 00001111 1101101]{v-mark.circle.orange=11}
+
+</v-clicks>
+
+---
+layout: center
+---
+## Floating point notation
+
+0 [10000000]{v-mark.box.orange} [1001001 00001111 1101101]{v-mark.circle.orange}
+
+<v-clicks>
+
+- Largest whole number: `0 11111110* 1111111 11111111 11111111`  = 1.99...&times;2^127_10 &approx; 3.40&times;10^38_10
+- Smallest precision: Up to `0 00000001  0000000 00000000 00000001` &approx; 1.17&times;10^-38_10
+- But the precision varies; .NET only claims precision to ~6-9 digits
+
+</v-clicks>
+
+<small>* 11111111 is used to help represent infinity</small>
+
+---
+
+<v-clicks depth="2">
+
+* This 4-byte floating point number is a `float` in .NET!
+* 3 guesses as to how many bytes are used in a _double_...
+  * 8-byte floating point is a .NET `double`
+* 3 more guessed how big a _Half_ is...
+  * 2-byte floating point is a .NET `Half`
+* A JS `Number` is also an 8-byte float point
+    * So when decoding JSON, all numbers should* be decoded as a `double`
+
+      \* it shouldn't
+
+</v-clicks>
+
+---
+layout: center
+---
+
+> "This all sounds kinda dodgy, sometimes exact precision is a requirement!"
+
+\- You, just now in your head
+
+---
+
+## .NET's `decimal`
+
+A way of representing base 10/decimal numbers accurately in binary.
+
+- Decimal integers are always exactly representable as binary integers
+- `decimal`s store an integer value and a (negative) base 10 exponent
+- e.g. [31415926535897932384626433833]{v-mark.box.orange=2}&times;[10]{v-mark.underline.orange=1}<sup>- [28]{v-mark.circle.orange=3}</sup><sub>10</sub> []{v-click}
+- 0 [11001011...00101001]{v-mark.box.orange=2} [11100]{v-mark.circle.orange=3} []{v-click}[]{v-click}
+
+<v-clicks>
+
+- Loads of bytes
+  - 16 bytes (twice the size of a double), only uses 102 bits
+- 28-29 digits of precision
+- Use when precision matters, e.g. money
+- Speaking of money, `decimal`s come at a cost (a performance one)
+- Bad luck if you're using JavaScript
+
+</v-clicks>
+
+---
+layout: center
+---
+
+## Specifying specificity
+
+```cs
+var myInt = 3;
+var myFloat = 3.14f;
+var myDouble = 3.14; // the default
+var myExplicitDouble = 3.14d; // or be explicit
+var myHalf = (Half)3.14; // .NET 5+
+var myDecimal = 3.14m; //m for money
+```
+
+---
+layout: center
+---
+
+> "What about numbers _below_ zero!?"
+
+\- You, just now in your head
+
+---
+layout: center
+---
+
+## The sign bit
+
+[0]{v-mark.circle.orange} 10000000 1001001 00001111 1101101
+
+0 is positive, 1 is negative
+
+---
+layout: center
+---
+
+## Don't need negative numbers or fractions?
+
+Try unsigned-integers to store numbers over twice as large ($n\times2+1$) as their signed counterparts!
+```cs
+ushort unsignedShort = 65535;
+uint unsignedInt = 4294967295;
+ulong unsignedLong = 18446744073709551615;
+```
+
+
+---
+
+# Thank you
+
+_<small>(My head hurts)</small>_
+
+## Questions?
+
+🐘 [@joe@umbraco&#8239;community.social](https://umbracocommunity.social/joe)
+
+🦋 [@joe.gl](https://bsky.app/profile/joe.gl)
+
+
+## Further Reading
+- https://csharpindepth.com/Articles/Decimal
+- https://csharpindepth.com/Articles/FloatingPoint
+- https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types
+- https://en.wikipedia.org/wiki/Single-precision_floating-point_format
+
+_<small>Special thanks to [Calculator.net's Binary Calculator](https://www.calculator.net/binary-calculator.html), [RapidTables' Binary converter](https://www.rapidtables.com/convert/number/binary-to-decimal.html) and [WolframAlpha](https://www.wolframalpha.com) for saving what remains of my sanity.</small>_
