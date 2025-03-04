@@ -75,6 +75,17 @@ class: text-center
 | ---- | ---- | ---- |
 | 6    | 6    | 6    |
 
+<!--
+This is how I learned about numbers in school.
+
+- Hundreds
+- Tens
+- Units
+
+But this can also be written as...
+-->
+
+
 ---
 layout: center
 class: text-center
@@ -84,6 +95,12 @@ class: text-center
 | 100  | 10   | 1    |
 | ---- | ---- | ---- |
 | 6    | 6    | 6    |
+
+<!--
+- Hundreds
+- Tens
+- Ones (units)
+-->
 
 ---
 layout: center
@@ -96,6 +113,20 @@ class: text-center
 | 6    | 6    | 6    |
 | 600  | 60   | 6    |
 
+<!--
+To "work out" what this number means, we multiply the value in the column by its header
+
+- 6 &times; 100 = 600
+- PLUS
+- 6 &times; 10 = 60
+- PLUS
+- 6 &times; 1 = 6
+
+Which gives us this value of 666 as we know it.
+
+But why 100, 10, 1?
+-->
+
 ---
 layout: center
 class: text-center
@@ -103,6 +134,14 @@ class: text-center
 | 10^2 *= 100* | 10^1 *= 10* | 10^0 *= 1* |
 | --------------------------------- | -------------------------------- | ------------------------------- |
 | 6                                 | 6                                | 6                               |
+
+<!--
+ - They're the powers of 10
+ - 10<sup>2</sup> = 100
+ - 10<sup>1</sup> = itself, 10
+ - 10<sup>0</sup>, anything to the power 0 is 1
+ - 10 is important in our counting system.
+-->
 
 ---
 layout: center
@@ -113,19 +152,30 @@ class: text-center
 
 **10**^1<br />⬆️
 
+<!--
+- Our counting system is called "base 10"
+- thats because the base number that we use for our powers is 10
+
+So, some **bassists** you might've come across...
+-->
+
 ---
 layout: default
 ---
 
-## Some bassists you might've heard of
+## Some bassists you might've come across
 
 ![Left: Lee playing the bass guitar in his band The Dysfunctions, Right: Richard playing the electric double bass](/media/bassists.jpg)
+
+<!--
+Sorry, some **bases** you might've come across...
+-->
 
 ---
 layout:
 ---
 
-## Some [bases]{v-mark.underline.orange=0} you might've heard of
+## Some [bases]{v-mark.underline.orange=0} you might've come across
 
 <v-clicks>
 
@@ -144,6 +194,26 @@ layout:
 
 </v-clicks>
 
+<!--
+Sorry, some **bases** you might've come across...
+
+- Decimal
+  - Dec as in 10
+  - base 10
+  - We have 10 fingers, its why our "normal" number system is 10
+- Duodecimal or dozenal
+  - as in a _dozen_ eggs
+  - base 12
+- hexadecimal
+  - hex as in six, dec as in 10
+  - base 16
+  - CSS colours
+- binary
+  - bi as in the two wheels on a bicyle
+  - base 2
+  - the one computers use
+-->
+
 ---
 ---
 ## Why do computers use binary?
@@ -155,6 +225,17 @@ Base 2 has 2 digits: 0, 1
 Hey look, that's a bit!
 
 On or off
+
+<!--
+Why do computers use binary?
+
+- Base 10 has 10 digits
+  - 0-9
+- Base 2 has 2 digits
+  - 0 and 1
+- You might recognise those two values as on or off
+  - Or a _bit_
+-->
 
 ---
 layout: center
@@ -216,111 +297,71 @@ What does `101010`_2 mean?
 
 </v-clicks>
 
+<!--
+Take an example of `101010` - what is this in decimal?
+
+- take the value in the first column (1)
+- multiply by the header value (32)
+- to give us 32
+- add all the other column values together
+- 32 + 0 + 8 + 2 + 0
+
+What does that equal?
+-->
+
 ---
 
-32 + 8 + 2 = 
+32 + 8 + 2 =
+
+🥁
 
 <SlidevVideo v-click autoplay>
   <source src="/media/42.mp4" type="video/mp4" />
 </SlidevVideo>
 
----
-layout: intro
-class: invert
----
-
-# Hexadecimal side-quest!
-*(Yes, we still have time for side-quests in a 10 minute talk)*
-
-
+<!--
+src: ./pages/hex-sidequest.md
+-->
 
 ---
-layout: center
-class: text-center
----
 
-<v-clicks>
+## That's `int`!
+This is how C# `short` (15 + 1 bits), `int` (31 + 1 bits), `long` (63 + 1 bits) work!
 
-| 16^1 *= 16* | 16^0 *= 1* |
-| ----------- | ---------- |
-|             | 1          |
-|             | 2[]{.truncate}          |
-|             | 9          |
-|             | A          |
-|             | B          |
-|             | C[]{.truncate}          |
-|             | F          |
-| 1           | 0          |
-
-</v-clicks>
-
----
-layout: two-cols-header
----
-
-## Why use hexadecimal in computing?
-
-1010_2 = 0 + 2 + 0 + 8 = 10_10
-
-10101010_2 = 0 + 2 + 0 + 8 + 0 + 32 + 0 + 128 = 170_10
-
-But in hexadecimal....
-
-10_10 = A_16
-
-170_10 = AA_16
-
-So converting from binary to hexadecimal is easy!
-
-[1 0 1 0]{v-mark.box.orange=1} [ 1 0 1 0]{v-mark.box.orange=2}<sub>2</sub>
-
-&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A_16
-
-1010_2 = A_16, so 10101010_2 must be AA_16.
-
----
-layout: center
----
-
-# Two hex characters are a byte!
-
-| Red        | Green      | Blue       |
-| ---------- | ---------- | ---------- |
-| 239_10      | 131_10     | 84_10     |
-| EF_16      | 83_16      | 54_16      |
-| 11101111_2 | 10000011_2 | 01010100_2 |
-
-
-
-Giving us the colour-code `#EF8354` (or `rgb(239, 131, 84)`)
-
-<br />
-
-*3 letter colour codes are cheating, and mean nothing.* <br />
-*`#267` = `#226677` Nothing numerically pleasing at all 😔*
-
----
-layout: intro
-class: invert
----
-
-/sidequest
-
----
-layout: center
----
-
-# Well, that's all well and good for **whole numbers**...
-
-This is how .NET `short` (15 + 1 bits), `int` (31 + 1 bits), `long` (63 + 1 bits) work!
-
-<v-clicks>
+<v-click>
 
 ### What's the +1 for?
 
 One bit is used to represent a minus sign. This is called _two's complement_.
 
-</v-clicks>
+[0]{v-mark.orange.circle} 0000000 00101010 = 42_10
+
+[1]{v-mark.orange.circle} 0000000 00101010 = -42_10
+
+</v-click>
+
+<!--
+That's how integers are stored.
+
+In C# we have:
+  - `short` 15 bit numbers
+  - `int` - 31 bits
+  - `long` - 63 bits
+
+[Click]
+What's the "+1"?
+
+- Stored with one bit used to represet the sign
+- two's complement
+- [Click] 0 = positive
+- [Click] 1 = negative
+
+-->
+--- 
+layout: center
+---
+
+# Well, that's all well and good for **whole numbers**...
 
 ---
 layout: center
@@ -332,7 +373,7 @@ layout: center
 | ------------ | ----------- | ---------- | ---- | -------------- | --------------- | ---------------- |
 | 0           | 0           | 3          | .    | 1             | 4              | 1                             |
 
-<v-click>&pi; &approx; 3.141</v-click>
+<v-click>&pi; &approx; 3.141_10</v-click>
 
 <v-click>
 
@@ -344,7 +385,28 @@ layout: center
 
 </v-click>
 
-<v-click>&pi; &approx; 3.125</v-click>
+<v-click>&pi; &approx; 3.125_10</v-click>
+
+<!--
+First lets analyse how "decimal numbers" work in base 10
+
+(I'm saying fractional numbers here to avoid confusion!)
+
+In base 10
+- decimal point 
+- tenths, hundredths and thousandths columns
+
+But we're using those powers as headings, so where do we go below 10<sup>0</sup>?
+
+[Click] Negative! 10<sup>-1</sup> [Click] 10<sup>-2</sup> [Click] 10<sup>-3</sup>
+
+[Click] That's a decimal approximation of Pi, by the way
+
+[Click] Counting fractions in binary works in the same way
+
+- Continue headers beyond the decimal points with negative powers
+- [Click] This is a binary representation of Pi
+-->
 
 ---
 layout: center
@@ -361,6 +423,13 @@ In base 10, $\frac{1}{3}$ is a bit of a problem...
 
 $\frac{1}{3} = 0.\overline{3}_{10} \approx 0.3333333_{10}$
 
+<!--
+As we know some fractions aren't exactly representable in decimal
+
+- Take a third, for example
+- Can take as many 10<sup>-n</sup> as you like, we'll never get to 1/3
+-->
+
 ---
 layout: center
 ---
@@ -374,6 +443,11 @@ In base 2, $\frac{1}{3}$ is **still** problem...
 
 $\frac{1}{3} = 0.\overline{10}_{2} \approx 0.0101010_{2} = 0.328125_{10}$
 
+<!--
+1/3 is also not representable in binary
+
+Any number that recurs in base 10 will recur in binary
+-->
 ---
 layout: center
 ---
@@ -387,6 +461,10 @@ But so is  $\frac{1}{10}$...
 $\frac{1}{10} = 0.0\overline{0011}_{2} \approx 0.0001100_{2} = 0.09375_{10}$
 
 \* rounded
+
+<!--
+But in binary, 1/10 is also a recurring number
+-->
 
 ---
 
@@ -405,6 +483,12 @@ $$
     & 0 & . & 0 & 1 & 0 & 0 & 1 & 1 & 1_{10} & = 0.3046875_{10}
 \end{array}
 $$
+
+<!-- 
+And just like multiplying 0.3 recurring by 3 doesn't quite equal 1 in decimal
+
+In binary if we add 0.1 and 0.2 we get 0.304... etc
+-->
 
 ---
 
@@ -425,6 +509,17 @@ When we say `0.1`, remember a decimal to binary conversion (and rounding!) is ha
 
 The difference in answers is because we were storing our number as 8-bit (unsigned, fixed-point), but JavaScript is using `Number`, a 64-bit signed floating point number
 
+<!--
+- We can see this in JS
+- running live
+- remember: when we assign a decimal number in code -> translated to binary
+
+
+- BTW, the reason this is different result
+- we calculated an 8-bit number
+- JS is using a 64-bit number 
+-->
+
 ---
 layout: center
 ---
@@ -433,11 +528,19 @@ layout: center
 
 <v-clicks>
 
-- We've been writing fractional decimal numbers using a `.`
+- We've been writing fractional numbers using a `.`
 - Computers store data as `0` or `1`
 - `.` is not a `0` or a `1`
 
 </v-clicks>
+
+<!--
+How do you write a decimal point!?
+
+- We've been writing fractional numbers using a `.`
+- Computers store data as `0` or `1`
+- `.` is not a `0` or a `1`
+-->
 
 ---
 layout: center
@@ -456,6 +559,16 @@ Lets use 4 bytes and imagine the decimal point sits between them
 - That's a lot of bits to contain a number as small as 65535_10...
 
 </v-clicks>
+
+<!--
+- One option is fixed point notation
+- Using 4 bytes
+- We set a convention
+  - 2 bytes before, 2 after
+- Max 65,000
+- Precision of 0.000 02
+- Uses a lot of bits to convey a small number
+-->
 ---
 
 ## Exponents, an introduction
@@ -479,6 +592,18 @@ $c \approx 2.998e+8ms^{-1}$
 
 Particularly on calculators.
 </v-click>
+
+<!--
+- might've seen exponents before
+- with decimal numbers
+- speed of light
+- big number, hard to grasp its magnitude
+- [Click] Use "scientific notation"
+- It's now between 1 and 10 (10^0 and 10^1)
+- an exponent to multiply it to the true value
+- magnitude is obvious (10<sup>8</sup>ms<sup>-1</sup>)
+- [Click] Calculators like to show this in a different form, but it's all the same
+-->
 
 ---
 
@@ -506,6 +631,17 @@ Particularly on calculators.
   0 [10000000]{v-mark.box.orange=10} [1001001 00001111 1101101]{v-mark.circle.orange=11}
 
 </v-clicks>
+
+<!--
+Exponents work in binary in a very similar way.
+
+This is the process to store a number as a binary exponent format
+
+- [Click] Convert the number to binary
+  - using pi again
+- [Click] 
+
+-->
 
 ---
 layout: center
