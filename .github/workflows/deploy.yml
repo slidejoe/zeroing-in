@@ -39,6 +39,8 @@ jobs:
         run: npx slidev build --base /zeroing-in/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   # Deployment job
   deploy:
