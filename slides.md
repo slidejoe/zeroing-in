@@ -357,6 +357,49 @@ What's the "+1"?
 - [Click] 1 = negative
 
 -->
+
+---
+---
+
+## Some numbers are stored with an _offset_
+
+8-bit two's complement: [0]{v-mark.orange.circle} 0101010 = 42_10 / [1]{v-mark.orange.circle} 0101010 = -42_10
+
+8-bit offset:
+<v-click>
+
+42_10 + 127_10 = 169_10 = [1]{v-mark.orange.circle=6}0101001_2
+
+</v-click>
+<v-click>
+
+-42_10 + 127_10 = 85_10 = [0]{v-mark.orange.circle=6}1010101_2
+
+</v-click>
+
+<v-click>
+```mermaid{theme: 'forest', scale: 0.7}
+timeline
+    -127 : 0
+       0 : 127
+     128 : 255
+```
+</v-click>
+
+<!--
+- For reference, here's an 8-bit two's complement number
+- [Click][Click][Click] To store as an offset
+- take the maximum stored by one-fewer (7-bits - 127)
+- add that onto number we want to store
+- 42 + 127 (max stored by 7-bits) = 169
+- convert that value to binary
+- [Click] -42 + 127 or 127 - 42 = 85
+- [Click] Effectively shifting the numberline
+- [Click]The same as two's complement with the first bit flipped
+
+We'll come onto where offsets are used
+-->
+
 --- 
 layout: center
 ---
@@ -622,7 +665,7 @@ Particularly on calculators.
 
   [1.]{v-mark.strike.orange}1001001000011111101101...&times;2^1_2
 
-4. Add 127 to the exponent (this number is offset to allow for positive and negative exponents)
+4. Add 127 to the exponent (this number is _offset_ to allow for positive and negative exponents)
 
   1_2 + 01111111_2 = 10000000
 
@@ -638,8 +681,16 @@ Exponents work in binary in a very similar way.
 This is the process to store a number as a binary exponent format
 
 - [Click] Convert the number to binary
-  - using pi again
-- [Click] 
+  - [Click] using pi again
+- [Click][Click] Multiply the value to be between 2<sup>0</sup> and 2<sup>1</sup> (1 and 2)
+  - Just like multiplying base 10 to 10<sup>0</sup> and 10<sup>1</sup> (1 and 10)
+- [Click][Click][Click] Discard the `1.`
+  - Because its between 1 and 2
+  - its always `1.`
+  - don't need to store that
+- [Click][Click] Exponent is stored as offset (why mix it?!)
+  - Add 127
+- [Click][Click] Fill in bits in predefined pattern
 
 -->
 
@@ -650,31 +701,45 @@ layout: center
 
 0 [10000000]{v-mark.box.orange} [1001001 00001111 1101101]{v-mark.circle.orange}
 
-<v-clicks>
-
 - Largest whole number: `0 11111110* 1111111 11111111 11111111`  = 1.99...&times;2^127_10 &approx; 3.40&times;10^38_10
 - Smallest precision: Up to `0 00000001  0000000 00000000 00000001` &approx; 1.17&times;10^-38_10
 - But the precision varies; .NET only claims precision to ~6-9 digits
 
-</v-clicks>
-
 <small>* 11111111 is used to help represent infinity</small>
+
+<!--
+- Much bigger number (positive and negative) than fixed point notation
+- Much more precise
+- But less accurate - only around 6-9 digits
+-->
 
 ---
 
 <v-clicks depth="2">
 
 * This 4-byte floating point number is a `float` in .NET!
-* 3 guesses as to how many bytes are used in a _double_...
-  * 8-byte floating point is a .NET `double`
-* 3 more guessed how big a _Half_ is...
+* 3 guesses how big a _Half_ is...
   * 2-byte floating point is a .NET `Half`
+* 3 more guesses as to how many bytes are used in a _double_...
+  * 8-byte floating point is a .NET `double`
 * A JS `Number` is also an 8-byte float point
     * So when decoding JSON, all numbers should* be decoded as a `double`
 
       \* it shouldn't
 
 </v-clicks>
+
+<!--
+* [Click] This 4-byte floating point number is a `float` in .NET!
+* [Click] 3 guesses how big a _Half_ is...
+  * [Click] 2-byte floating point is a .NET `Half`
+* [Click] 3 more guesses as to how many bytes are used in a _double_...
+  * [Click] 8-byte floating point is a .NET `double`
+* [Click] A JS `Number` is also an 8-byte float point
+    * [Click] So when decoding JSON, all numbers should* be decoded as a `double`
+
+      \* it shouldn't
+-->
 
 ---
 layout: center
@@ -683,6 +748,12 @@ layout: center
 > "This all sounds kinda dodgy, sometimes exact precision is a requirement!"
 
 \- You, just now in your head
+
+<!--
+> "This all sounds kinda dodgy, sometimes exact precision is a requirement!"
+
+\- You, just now in your head
+-->
 
 ---
 
@@ -706,6 +777,27 @@ A way of representing base 10/decimal numbers accurately in binary.
 
 </v-clicks>
 
+<!--
+- Decimal integers are always exactly representable as binary integers
+- `decimal`s store an integer value and a (negative) base 10 exponent
+- So to store pi again
+- [Click] We're storing the number with base 10 exponent
+- [Click] That long integer value, is converted into binary
+- [Click] This power will always be below 0, so we ignore the minus and store 28 as binary
+- [Click] A downside of decimal is that it uses 16 bytes
+- Twice as many as `double`
+- [Click] But does provide 28 or 29 digits of precision
+- Compared to 6ish for a float
+- [Click] Use it when precision matters
+- Money!
+- [Click] Speaking of money
+- Decimals come at a cost
+- (a performance one!)
+- [Click] Decimal is a .NET concept
+- not all languages have an equivalent
+- bad luck JS
+-->
+
 ---
 layout: center
 ---
@@ -721,6 +813,17 @@ var myHalf = (Half)3.14; // .NET 5+
 var myDecimal = 3.14m; //m for money
 ```
 
+<!--
+Now we know why you might specify which type to use, here is how we do that.
+
+- Integers are default if you don't use a decimal point.
+- you can specify a float by appending an `f`
+- double is default with decimal point
+- you can be explicit using a `d`
+- half has no C# shortcut yet, so you have to explicitly cast
+- decimals use `m` for money
+-->
+
 ---
 layout: center
 ---
@@ -729,15 +832,19 @@ layout: center
 
 \- You, just now in your head
 
+<!-- What about negative numbers? -->
+
 ---
 layout: center
 ---
 
-## The sign bit
+## Two's complement, just like integers
 
 [0]{v-mark.circle.orange} 10000000 1001001 00001111 1101101
 
 0 is positive, 1 is negative
+
+<!-- [Click] Two's complement, just like integers -->
 
 ---
 layout: center
@@ -752,6 +859,13 @@ uint unsignedInt = 4294967295;
 ulong unsignedLong = 18446744073709551615;
 ```
 
+<!--
+If saving memory, try using the **unsigned** integer types
+
+Only need to store:
+- positive
+- whole numbers
+-->
 
 ---
 
@@ -773,3 +887,5 @@ _<small>(My head hurts)</small>_
 - https://en.wikipedia.org/wiki/Single-precision_floating-point_format
 
 _<small>Special thanks to [Calculator.net's Binary Calculator](https://www.calculator.net/binary-calculator.html), [RapidTables' Binary converter](https://www.rapidtables.com/convert/number/binary-to-decimal.html) and [WolframAlpha](https://www.wolframalpha.com) for saving what remains of my sanity.</small>_
+
+<!-- Thank you! -->
